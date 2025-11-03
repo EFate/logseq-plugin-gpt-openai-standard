@@ -24,7 +24,8 @@ function handleOpenAIError(e: any) {
 
   if (httpStatus === 401) {
     console.error("OpenAI API key is invalid.");
-    logseq.App.showMsg("Invalid OpenAI API Key.", "error");
+    // 提供更具体的错误信息，区分文本模型和文生图模型的API Key问题
+    logseq.App.showMsg("Invalid OpenAI API Key. Please check your API key settings for both text and image generation.", "error");
   } else if (httpStatus === 429) {
     if (errorType === "insufficient_quota") {
       console.error(
@@ -44,7 +45,9 @@ function handleOpenAIError(e: any) {
 }
 
 function validateSettings(settings: OpenAIOptions) {
-  if (!settings.apiKey) {
+  // 检查是否有可用的API Key（主API Key或文生图专用API Key）
+  const hasValidApiKey = settings.apiKey || settings.text2ImgApiKey;
+  if (!hasValidApiKey) {
     console.error("Need API key set in settings.");
     logseq.App.showMsg(
       "Need openai API key. Add one in plugin settings.",

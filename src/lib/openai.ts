@@ -133,11 +133,20 @@ export async function text2Img(
     style: options.text2ImgStyle
   };
 
-  const response = await backOff(
-    () => openai.images.generate(imageParameters),
-    retryOptions
-  );
-  return response.data?.[0]?.url;
+  try {
+    const response = await backOff(
+      () => openai.images.generate(imageParameters),
+      retryOptions
+    );
+    return response.data?.[0]?.url;
+  } catch (e: any) {
+    if (e?.response?.data?.error) {
+      console.error(e?.response?.data?.error);
+      throw new Error(e?.response?.data?.error?.message);
+    } else {
+      throw e;
+    }
+  }
 }
 
 export async function openAI(
