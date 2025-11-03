@@ -1,8 +1,8 @@
 {
-  "name": "logseq-plugin-gpt3-openai",
-  "author": "Brian Sunter",
+  "name": "logseq-plugin-gpt-openai-standard",
+  "author": "EFate",
   "private": true,
-  "version": "1.14.2",
+  "version": "0.0.1",
   "main": "dist/index.html",
   "scripts": {
     "dev": "vite",
@@ -44,7 +44,7 @@
     "use-immer": "^0.8.1"
   },
   "logseq": {
-    "name": "logseq-plugin-gpt3-openai",
+    "name": "logseq-plugin-gpt-openai-standard",
     "id": "_79n711y6e"
   },
   "peerDependencies": {
