@@ -102,42 +102,33 @@ export async function text2Img(
 ): Promise<string | undefined> {
   const options = { ...OpenAIDefaults(openAiOptions.apiKey), ...openAiOptions };
 
-  // Use generic fetch API instead of OpenAI SDK to support other providers
-  const baseUrl = options.completionEndpoint ? migrateOldUrl(options.completionEndpoint) : "https://api.openai.com/v1";
-  
+  // Use OpenAI SDK with configurable baseURL to support various providers
+  const openai = new OpenAI({
+    apiKey: options.apiKey,
+    baseURL: options.completionEndpoint,
+    dangerouslyAllowBrowser: true
+  });
+
   // Convert image size format
   const imageSizeRequest = options.text2ImgImageSize ?
     options.text2ImgImageSize.includes('x') 
       ? options.text2ImgImageSize 
-      : `${options.text2ImgImageSize}x${options.text2ImgImageSize}` : '256x256';  
+      : `${options.text2ImgImageSize}x${options.text2ImgImageSize}` : '1024x1024';  
 
-  const requestBody = {
+  const imageParameters: OpenAI.ImageGenerateParams = {
     prompt,
     n: 1,
-    size: imageSizeRequest,
+    size: imageSizeRequest as OpenAI.ImageGenerateParams["size"],
     model: options.text2ImgModel,
     quality: options.text2ImgQuality,
     style: options.text2ImgStyle
   };
 
   const response = await backOff(
-    () => fetch(baseUrl + '/images/generations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${options.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    }),
+    () => openai.images.generate(imageParameters),
     retryOptions
   );
-
-  if (!response.ok) {
-    throw new Error(`Error generating image: ${response.statusText}`);
-  }
-
-  const jsonResponse = await response.json();
-  return jsonResponse.data?.[0]?.url;
+  return response.data?.[0]?.url;
 }
 
 export async function openAI(

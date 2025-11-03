@@ -63,9 +63,9 @@ function validateSettings(settings: OpenAIOptions) {
     settings.text2ImgImageSize !== '1024x1792' &&
     settings.text2ImgImageSize !== '1792x1024'
   ) {
-    console.error("Text2Img image size must be 256, 512, or 1024.");
-    logseq.App.showMsg("Text2Img image size must be 256, 512, or 1024.", "error");
-    throw new Error("Text2Img image size must be 256, 512, 1024, 1024x1792, or 179x1024");
+    console.error("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024.");
+    logseq.App.showMsg("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024.", "error");
+    throw new Error("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024");
   }
 }
 
