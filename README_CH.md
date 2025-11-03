@@ -6,6 +6,7 @@
 <h3 align="center">Logseq GPT 插件</h3>
 
 <div align="center">
+</div>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
