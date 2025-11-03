@@ -11,15 +11,15 @@
 
 ---
 
-<p align="center">Logseq AI Assistant Plugin with OpenAI API standard interface integration, providing intelligent text generation and image generation capabilities.</p>
+<p align="center">Logseq AI Assistant Plugin with OpenAI API standard interface, providing intelligent text generation and image generation capabilities.</p>
 
-</div>
+
 
 ## ✨ Features
 
 - **🤖 AI Text Generation**: Supports GPT-3.5, GPT-4, and other OpenAI API standard compatible models
 - **🎨 Text-to-Image Generation**: Create images using DALL-E 2/3 and other compatible models
-- **⚡ Real-time Streaming Responses**: Stream responses for better user experience
+- **⚡ Real-time Streaming Response**: Stream responses for better user experience
 - **🔧 Flexible Configuration**: Independent API endpoints and keys for text and image services
 - **⌨️ Keyboard Shortcuts**: Quick access to AI commands for improved productivity
 - **📝 Custom Prompts**: Define system prompts to guide AI behavior
@@ -35,6 +35,8 @@
 
 #### Image Generation
 - `/text2img` - Generate images based on text descriptions
+
+
 
 ## ⚙️ Configuration
 
@@ -58,8 +60,12 @@
 
 <img src="./docs/gpt.gif" style="zoom: 100%" />
 
+
+
 ### Image Generation
 <img src="./docs/text2img.gif" style="zoom: 100%" />
+
+
 
 ## ⌨️ Keyboard Shortcuts
 
@@ -68,7 +74,7 @@
 
 ## 🔧 Development Guide
 
-### Requirements
+### Prerequisites
 - Node.js
 - pnpm
 
@@ -88,7 +94,7 @@ pnpm run build
 ### Common Issues
 
 1. **API Key Error**: Ensure your OpenAI API key is valid and has sufficient credits
-2. **Rate Limiting**: If encountering rate limits, wait a few minutes and try again
+2. **Rate Limiting**: If you encounter rate limits, wait a few minutes and try again
 
 ## 🤝 Contributing
 
@@ -102,13 +108,12 @@ We welcome contributions! Please:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
+## 💝 Support
 
-- [@EFate](https://github.com/EFate) - Current maintainer
-- [@briansunter](https://github.com/briansunter) - Original author
+If you find this project helpful, please give it a ⭐Star at the top of the project page!
 
-## 🙏 Acknowledgments
 
-- [Logseq](https://logseq.com/) for providing an excellent note-taking platform
-- [OpenAI](https://openai.com/) for providing powerful AI models
-- All contributors and users who helped improve this plugin
+
+## 📈 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=EFate/logseq-plugin-gpt-openai-standard&type=Date)](https://star-history.com/#EFate/logseq-plugin-gpt-openai-standard&Date)

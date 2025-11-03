@@ -13,7 +13,7 @@
 
 <p align="center">Logseq AI 助手插件，集成 OpenAI API 标准接口，提供智能文本生成和图像生成功能。</p>
 
-</div>
+
 
 ## ✨ 功能特性
 
@@ -108,13 +108,12 @@ pnpm run build
 
 本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
 
-## 👥 作者
+## 💝 支持
 
-- [@EFate](https://github.com/EFate) - 当前维护者
-- [@briansunter](https://github.com/briansunter) - 原始作者
+如果觉得有所帮助，点击项目主页顶部的⭐Star 按钮支持！
 
-## 🙏 致谢
 
-- [Logseq](https://logseq.com/) 提供出色的笔记平台
-- [OpenAI](https://openai.com/) 提供强大的 AI 模型
-- 所有帮助改进此插件的贡献者和用户
+
+## 📈 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=EFate/logseq-plugin-gpt-openai-standard&type=Date)](https://star-history.com/#EFate/logseq-plugin-gpt-openai-standard&Date)
