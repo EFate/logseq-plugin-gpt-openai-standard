@@ -11,13 +11,13 @@
 
 ---
 
-<p align="center">Logseq AI Assistant Plugin with OpenAI API standard interface, providing intelligent text generation and image generation capabilities.</p>
+<p align="center">Logseq AI Assistant Plugin, integrating OpenAI API standard interface, providing intelligent text generation and image generation capabilities.</p>
 
 
 
 ## ✨ Features
 
-- **🤖 AI Text Generation**: Supports GPT-3.5, GPT-4, and other OpenAI API standard compatible models
+- **🤖 AI Text Generation**: Supports GPT-3.5, GPT-4 and other OpenAI API standard compatible models
 - **🎨 Text-to-Image Generation**: Create images using DALL-E 2/3 and other compatible models
 - **⚡ Real-time Streaming Response**: Stream responses for better user experience
 - **🔧 Flexible Configuration**: Independent API endpoints and keys for text and image services
@@ -29,12 +29,12 @@
 ### Basic Usage
 
 #### Text Generation Commands
-- `/gpt-block` - Generate AI content for the current block
-- `/gpt-page` - Generate AI content for the entire page
+- `/gpt-block` - Generate AI content for current block
+- `/gpt-page` - Generate AI content for entire page
 - `/gpt` - Open AI command panel
 
 #### Image Generation
-- `/text2img` - Generate images based on text descriptions
+- `/text2img` - Generate images from text descriptions
 
 
 
@@ -49,7 +49,7 @@
 
 ### Image Generation Settings
 
-- **Model**: DALL-E 2, DALL-E 3, or other compatible models
+- **Model**: DALL-E 2, DALL-E 3 or other compatible models
 - **Image Size**: 256x256, 512x512, 1024x1024, 1024x1792, 1792x1024
 - **Quality**: Standard or HD
 - **Style**: Vivid or Natural
@@ -74,7 +74,7 @@
 
 ## 🔧 Development Guide
 
-### Prerequisites
+### Environment Requirements
 - Node.js
 - pnpm
 
@@ -94,7 +94,7 @@ pnpm run build
 ### Common Issues
 
 1. **API Key Error**: Ensure your OpenAI API key is valid and has sufficient credits
-2. **Rate Limiting**: If you encounter rate limits, wait a few minutes and try again
+2. **Rate Limiting**: If encountering rate limits, wait a few minutes and try again
 
 ## 🤝 Contributing
 
@@ -110,7 +110,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💝 Support
 
-If you find this project helpful, please give it a ⭐Star at the top of the project page!
+If you find this helpful, click the ⭐Star button at the top of the project homepage to show your support!
 
 
 
