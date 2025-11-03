@@ -63,6 +63,22 @@ export const settingsSchema: SettingSchemaDesc[] = [
       "Prepends the output with this string. Such as a tag like [[gpt3]] or markdown like > to blockquote. Add a space at the end if you want a space between the prefix and the output or \\n for a linebreak.",
   },
   {
+    key: "text2ImgApiKey",
+    type: "string",
+    default: "",
+    title: "Text2Img API Key",
+    description:
+      "API key for text-to-image generation service. Leave empty to use the same API key as chat completion.",
+  },
+  {
+    key: "text2ImgEndpoint",
+    type: "string",
+    default: "https://api.openai.com/v1",
+    title: "Text2Img API Endpoint",
+    description:
+      "API endpoint URL for text-to-image generation service. Leave empty to use the same endpoint as chat completion.",
+  },
+  {
     key: "text2ImgImageSize",
     type: "string",
     default: "1024",
@@ -119,10 +135,12 @@ export function getOpenaiSettings(): PluginOptions {
   const injectPrefix = unescapeNewlines(logseq.settings!["injectPrefix"]);
   const temperature = Number.parseFloat(logseq.settings!["openAITemperature"]);
   const maxTokens = Number.parseInt(logseq.settings!["openAIMaxTokens"]);
+  const text2ImgApiKey = logseq.settings!["text2ImgApiKey"];
   const text2ImgImageSize = logseq.settings!["text2ImgImageSize"] as Text2ImgImageSize;
   const text2ImgModel = logseq.settings!["text2ImgModel"];
   const text2ImgStyle = logseq.settings!["text2ImgStyle"];
   const text2ImgQuality = logseq.settings!["text2ImgQuality"];
+  const text2ImgEndpoint = logseq.settings!["text2ImgEndpoint"];
   const chatPrompt = logseq.settings!["chatPrompt"];
   const completionEndpoint = logseq.settings!["chatCompletionEndpoint"];
   return {
@@ -130,10 +148,12 @@ export function getOpenaiSettings(): PluginOptions {
     completionEngine,
     temperature,
     maxTokens,
+    text2ImgApiKey,
     text2ImgImageSize,
     text2ImgModel,
     text2ImgQuality,
     text2ImgStyle,
+    text2ImgEndpoint,
     injectPrefix,
     chatPrompt,
     completionEndpoint,

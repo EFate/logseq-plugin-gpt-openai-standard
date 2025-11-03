@@ -11,10 +11,12 @@ export interface OpenAIOptions {
   completionEngine?: string;
   temperature?: number;
   maxTokens?: number;
+  text2ImgApiKey?: string;
   text2ImgImageSize?: Text2ImgImageSize;
   text2ImgModel?: Text2ImgModel;
   text2ImgQuality?: Text2ImgQuality;
   text2ImgStyle?: Text2ImgStyle;
+  text2ImgEndpoint?: string;
   chatPrompt?: string;
   completionEndpoint?: string;
 }
@@ -24,10 +26,12 @@ const OpenAIDefaults = (apiKey: string): OpenAIOptions => ({
   completionEngine: "gpt-3.5-turbo",
   temperature: 1.0,
   maxTokens: 1000,
+  text2ImgApiKey: undefined,
   text2ImgImageSize: '1024',
   text2ImgModel: 'dall-e-3',
   text2ImgQuality: 'standard',
-  text2ImgStyle: 'vivid'
+  text2ImgStyle: 'vivid',
+  text2ImgEndpoint: undefined
 });
 
 const retryOptions = {
@@ -103,9 +107,14 @@ export async function text2Img(
   const options = { ...OpenAIDefaults(openAiOptions.apiKey), ...openAiOptions };
 
   // Use OpenAI SDK with configurable baseURL to support various providers
+  // Use text2ImgEndpoint if provided, otherwise fallback to completionEndpoint
+  // Use text2ImgApiKey if provided, otherwise fallback to main apiKey
+  const endpoint = options.text2ImgEndpoint || options.completionEndpoint;
+  const apiKey = options.text2ImgApiKey || options.apiKey;
+  
   const openai = new OpenAI({
-    apiKey: options.apiKey,
-    baseURL: options.completionEndpoint,
+    apiKey: apiKey,
+    baseURL: endpoint,
     dangerouslyAllowBrowser: true
   });
 
@@ -144,7 +153,7 @@ export async function openAI(
   });
   try {
     if (engine && engine.trim().length > 0) {
-      const inputMessages:OpenAI.Chat.CreateChatCompletionRequestMessage[] =  [{ role: "user", content: input }];
+      const inputMessages: OpenAI.Chat.ChatCompletionMessageParam[] =  [{ role: "user", content: input }];
       if (openAiOptions.chatPrompt && openAiOptions.chatPrompt.length > 0) {
         inputMessages.unshift({ role: "system", content: openAiOptions.chatPrompt });
 
@@ -220,7 +229,7 @@ export async function openAIWithStream(
 
   try {
     if (engine && engine.trim().length > 0) {
-      const inputMessages: OpenAI.Chat.CreateChatCompletionRequestMessage[] = [{ role: "user", content: input }];
+      const inputMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [{ role: "user", content: input }];
       if (openAiOptions.chatPrompt && openAiOptions.chatPrompt.length > 0) {
         inputMessages.unshift({ role: "system", content: openAiOptions.chatPrompt });
       }
