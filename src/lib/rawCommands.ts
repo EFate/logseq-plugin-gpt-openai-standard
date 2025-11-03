@@ -1,6 +1,6 @@
 import { IHookEvent } from "@logseq/libs/dist/LSPlugin.user";
-import { getAudioFile, getPageContentFromBlock, saveDalleImage } from "./logseq";
-import { OpenAIOptions, dallE, whisper, openAIWithStream } from "./openai";
+import { getAudioFile, getPageContentFromBlock, saveText2ImgImage } from "./logseq";
+import { OpenAIOptions, text2Img, whisper, openAIWithStream } from "./openai";
 import { getOpenaiSettings } from "./settings";
 
 function handleOpenAIError(e: any) {
@@ -54,18 +54,18 @@ function validateSettings(settings: OpenAIOptions) {
   }
 
   if (
-    settings.dalleImageSize !== '256' &&
-    settings.dalleImageSize !== '256x256' &&
-    settings.dalleImageSize !== '512' &&
-    settings.dalleImageSize !== '512x512' &&
-    settings.dalleImageSize !== '1024' &&
-    settings.dalleImageSize !== '1024x1024' &&
-    settings.dalleImageSize !== '1024x1792' &&
-    settings.dalleImageSize !== '1792x1024'
+    settings.text2ImgImageSize !== '256' &&
+    settings.text2ImgImageSize !== '256x256' &&
+    settings.text2ImgImageSize !== '512' &&
+    settings.text2ImgImageSize !== '512x512' &&
+    settings.text2ImgImageSize !== '1024' &&
+    settings.text2ImgImageSize !== '1024x1024' &&
+    settings.text2ImgImageSize !== '1024x1792' &&
+    settings.text2ImgImageSize !== '1792x1024'
   ) {
-    console.error("DALL-E image size must be 256, 512, or 1024.");
-    logseq.App.showMsg("DALL-E image size must be 256, 512, or 1024.", "error");
-    throw new Error("DALL-E image size must be 256, 512, 1024, 1024x1792, or 179x1024");
+    console.error("Text2Img image size must be 256, 512, or 1024.");
+    logseq.App.showMsg("Text2Img image size must be 256, 512, or 1024.", "error");
+    throw new Error("Text2Img image size must be 256, 512, 1024, 1024x1792, or 179x1024");
   }
 }
 
@@ -158,7 +158,7 @@ export async function runGptPage(b: IHookEvent) {
   }
 }
 
-export async function runDalleBlock(b: IHookEvent) {
+export async function runText2ImgBlock(b: IHookEvent) {
   const openAISettings = getOpenaiSettings();
   validateSettings(openAISettings);
 
@@ -175,12 +175,12 @@ export async function runDalleBlock(b: IHookEvent) {
   }
 
   try {
-    const imageURL = await dallE(currentBlock.content, openAISettings);
+    const imageURL = await text2Img(currentBlock.content, openAISettings);
     if (!imageURL) {
-      logseq.App.showMsg("No Dalle results.", "warning");
+      logseq.App.showMsg("No Text2Img results.", "warning");
       return;
     }
-    const imageFileName = await saveDalleImage(imageURL);
+    const imageFileName = await saveText2ImgImage(imageURL);
     await logseq.Editor.insertBlock(currentBlock.uuid, imageFileName, {
       sibling: false,
     });

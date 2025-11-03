@@ -1,5 +1,5 @@
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin";
-import { DalleImageSize, OpenAIOptions } from "./openai";
+import { Text2ImgImageSize, OpenAIOptions } from "./openai";
 
 interface PluginOptions extends OpenAIOptions {
   injectPrefix?: string;
@@ -12,48 +12,47 @@ export const settingsSchema: SettingSchemaDesc[] = [
     default: "",
     title: "OpenAI API Key",
     description:
-      "Your OpenAI API key. You can get one at https://beta.openai.com",
+      "Your OpenAI API key for AI text generation.",
   },
   {
     key: "openAICompletionEngine",
     type: "string",
     default: "gpt-3.5-turbo",
-    title: "OpenAI Completion Engine",
-    description: "See Engines in OpenAI docs.",
+    title: "AI Model",
+    description: "Select the AI model for text generation.",
   },
   {
     key: "chatCompletionEndpoint",
     type: "string",
     default: "https://api.openai.com/v1",
-    title: "OpenAI API Completion Endpoint",
+    title: "API Endpoint",
     description:
-      "The endpoint to use for OpenAI API completion requests. You shouldn't need to change this.",
+      "API endpoint URL for AI service.",
   },
   {
     key: "chatPrompt",
     type: "string",
     default:
       "Do not refer to yourself in your answers. Do not say as an AI language model...",
-    title: "OpenAI Chat Prompt",
+    title: "System Prompt",
     description:
-      "Initial message that tells ChatGPT how to answer. Only used for gpt-3.5. See https://platform.openai.com/docs/guides/chat/introduction for more info.",
+      "System message to guide AI response behavior.",
   },
   {
     key: "openAITemperature",
     type: "number",
     default: 1.0,
-    title: "OpenAI Temperature",
+    title: "Temperature",
     description:
-      "The temperature controls how much randomness is in the output.<br/>" +
-      "You can set a different temperature in your own prompt templates by adding a 'prompt-template' property to the block.",
+      "Control response randomness (0.1-0.5: focused, 0.7-1.0: creative).",
   },
   {
     key: "openAIMaxTokens",
     type: "number",
     default: 1000,
-    title: "OpenAI Max Tokens",
+    title: "Max Tokens",
     description:
-      "The maximum amount of tokens to generate. Tokens can be words or just chunks of characters. The number of tokens processed in a given API request depends on the length of both your inputs and outputs. As a rough rule of thumb, 1 token is approximately 4 characters or 0.75 words for English text. One limitation to keep in mind is that your text prompt and generated completion combined must be no more than the model's maximum context length (for most models this is 2048 tokens, or about 1500 words).",
+      "Maximum tokens per response (affects response length and API cost).",
   },
   {
     key: "injectPrefix",
@@ -64,22 +63,22 @@ export const settingsSchema: SettingSchemaDesc[] = [
       "Prepends the output with this string. Such as a tag like [[gpt3]] or markdown like > to blockquote. Add a space at the end if you want a space between the prefix and the output or \\n for a linebreak.",
   },
   {
-    key: "dalleImageSize",
+    key: "text2ImgImageSize",
     type: "string",
     default: "1024",
-    title: "DALL-E Image Size",
+    title: "Text2Img Image Size",
     description:
       "Size of the image to generate. Can be 256, 512, or 1024 for dall-e-2;  Must be one of 1024x1024 , 1792x1024 , or 1024x1792 for dall-e-3 models.",
   },
   {
-    key: "dalleModel",
+    key: "text2ImgModel",
     type: "string",
     default: "dall-e-3",
-    title: "DALL-E Model",
-    description: "The DALL-E model to use. Can be dall-e-2 or dall-e-3.",
+    title: "Text2Img Model",
+    description: "The text-to-image model to use. Can be any model name supported by your API provider.",
   },
   {
-    key: "dalleStyle",
+    key: "text2ImgStyle",
     type: "string",
     default: "vivid",
     title: "Style",
@@ -87,7 +86,7 @@ export const settingsSchema: SettingSchemaDesc[] = [
       "The style of the generated images. Must be one of vivid or natural. Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.",
   },
   {
-    key: "dalleQuality",
+    key: "text2ImgQuality",
     type: "string",
     default: "standard",
     title: "Quality",
@@ -120,10 +119,10 @@ export function getOpenaiSettings(): PluginOptions {
   const injectPrefix = unescapeNewlines(logseq.settings!["injectPrefix"]);
   const temperature = Number.parseFloat(logseq.settings!["openAITemperature"]);
   const maxTokens = Number.parseInt(logseq.settings!["openAIMaxTokens"]);
-  const dalleImageSize = logseq.settings!["dalleImageSize"] as DalleImageSize;
-  const dalleModel = logseq.settings!["dalleModel"];
-  const dalleStyle = logseq.settings!["dalleStyle"];
-  const dalleQuality = logseq.settings!["dalleQuality"];
+  const text2ImgImageSize = logseq.settings!["text2ImgImageSize"] as Text2ImgImageSize;
+  const text2ImgModel = logseq.settings!["text2ImgModel"];
+  const text2ImgStyle = logseq.settings!["text2ImgStyle"];
+  const text2ImgQuality = logseq.settings!["text2ImgQuality"];
   const chatPrompt = logseq.settings!["chatPrompt"];
   const completionEndpoint = logseq.settings!["chatCompletionEndpoint"];
   return {
@@ -131,10 +130,10 @@ export function getOpenaiSettings(): PluginOptions {
     completionEngine,
     temperature,
     maxTokens,
-    dalleImageSize,
-    dalleModel,
-    dalleQuality,
-    dalleStyle,
+    text2ImgImageSize,
+    text2ImgModel,
+    text2ImgQuality,
+    text2ImgStyle,
     injectPrefix,
     chatPrompt,
     completionEndpoint,

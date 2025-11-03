@@ -2,19 +2,19 @@ import OpenAI from "openai";
 import "@logseq/libs";
 import { backOff } from "exponential-backoff";
 
-export type DalleImageSize = '256' | '256x256' | '512' | '512x512' | '1024' | '1024x1024' | '1024x1792' | '1792x1024';
-export type DalleModel = 'dall-e-2' | 'dall-e-3';
-export type DalleQuality = 'standard' | 'hd';
-export type DalleStyle = 'natural' | 'vivid';
+export type Text2ImgImageSize = '256' | '256x256' | '512' | '512x512' | '1024' | '1024x1024' | '1024x1792' | '1792x1024';
+export type Text2ImgModel = string;
+export type Text2ImgQuality = 'standard' | 'hd';
+export type Text2ImgStyle = 'natural' | 'vivid';
 export interface OpenAIOptions {
   apiKey: string;
   completionEngine?: string;
   temperature?: number;
   maxTokens?: number;
-  dalleImageSize?: DalleImageSize;
-  dalleModel?: DalleModel;
-  dalleQuality?: DalleQuality;
-  dalleStyle?: DalleStyle;
+  text2ImgImageSize?: Text2ImgImageSize;
+  text2ImgModel?: Text2ImgModel;
+  text2ImgQuality?: Text2ImgQuality;
+  text2ImgStyle?: Text2ImgStyle;
   chatPrompt?: string;
   completionEndpoint?: string;
 }
@@ -24,10 +24,10 @@ const OpenAIDefaults = (apiKey: string): OpenAIOptions => ({
   completionEngine: "gpt-3.5-turbo",
   temperature: 1.0,
   maxTokens: 1000,
-  dalleImageSize: '1024',
-  dalleModel: 'dall-e-3',
-  dalleQuality: 'standard',
-  dalleStyle: 'vivid'
+  text2ImgImageSize: '1024',
+  text2ImgModel: 'dall-e-3',
+  text2ImgQuality: 'standard',
+  text2ImgStyle: 'vivid'
 });
 
 const retryOptions = {
@@ -96,40 +96,48 @@ export async function whisper(file: File,openAiOptions:OpenAIOptions): Promise<s
     return jsonResponse.text;
   }
 
-export async function dallE(
+export async function text2Img(
   prompt: string,
   openAiOptions: OpenAIOptions
 ): Promise<string | undefined> {
   const options = { ...OpenAIDefaults(openAiOptions.apiKey), ...openAiOptions };
 
-  const openai = new OpenAI({
-    apiKey: options.apiKey,
-    baseURL: options.completionEndpoint,
-    dangerouslyAllowBrowser: true
-  });
+  // Use generic fetch API instead of OpenAI SDK to support other providers
+  const baseUrl = options.completionEndpoint ? migrateOldUrl(options.completionEndpoint) : "https://api.openai.com/v1";
+  
+  // Convert image size format
+  const imageSizeRequest = options.text2ImgImageSize ?
+    options.text2ImgImageSize.includes('x') 
+      ? options.text2ImgImageSize 
+      : `${options.text2ImgImageSize}x${options.text2ImgImageSize}` : '256x256';  
 
-  // TODO : fix this typing loop
-  // @ts-ignore  
-  const imageSizeRequest: OpenAI.ImageGenerateParams["size"] = options.dalleImageSize ?
-  options.dalleImageSize!.includes('x') 
-    ? options.dalleImageSize 
-    : `${options.dalleImageSize}x${options.dalleImageSize}` : '256x256';  
-
-  const imageParameters: OpenAI.ImageGenerateParams = {
+  const requestBody = {
     prompt,
     n: 1,
     size: imageSizeRequest,
-    model: options.dalleModel,
-    quality: options.dalleQuality,
-    style: options.dalleStyle
+    model: options.text2ImgModel,
+    quality: options.text2ImgQuality,
+    style: options.text2ImgStyle
   };
 
   const response = await backOff(
-    () =>
-      openai.images.generate(imageParameters),
+    () => fetch(baseUrl + '/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${options.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    }),
     retryOptions
   );
-  return response.data?.[0]?.url;
+
+  if (!response.ok) {
+    throw new Error(`Error generating image: ${response.statusText}`);
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse.data?.[0]?.url;
 }
 
 export async function openAI(

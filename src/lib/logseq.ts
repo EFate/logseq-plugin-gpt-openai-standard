@@ -53,9 +53,9 @@ export async function getPageContentFromBlock(b: BlockEntity): Promise<string> {
   return blockContents.join(" ");
 }
 
-export async function saveDalleImage(imageURL: string): Promise<string> {
+export async function saveText2ImgImage(imageURL: string): Promise<string> {
   const s = logseq.Assets.makeSandboxStorage();
-  const imageName = `dalle-${Date.now()}.png`;
+  const imageName = `text2img-${Date.now()}.png`;
   const response = await fetch(imageURL);
 
   const responseArrayBuffer: any = await response.arrayBuffer();

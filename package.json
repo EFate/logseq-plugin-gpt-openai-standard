@@ -45,7 +45,8 @@
   },
   "logseq": {
     "name": "logseq-plugin-gpt-openai-standard",
-    "id": "_79n711y6e"
+    "id": "_79n711y6e",
+    "description": "A plugin for AI-assisted note taking in Logseq using OpenAI's API. Supports all OpenAI API standard generation models including GPT-3.5, GPT-4, and other compatible models."
   },
   "peerDependencies": {
     "semantic-release": "^19.0.2"
