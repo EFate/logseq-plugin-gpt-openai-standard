@@ -19,7 +19,7 @@ export const settingsSchema: SettingSchemaDesc[] = [
     type: "string",
     default: "gpt-3.5-turbo",
     title: "AI Model",
-    description: "Select the AI model for text generation.",
+    description: "Model name for text generation. Supports any model compatible with OpenAI API specification (e.g., gpt-3.5-turbo, gpt-4, Claude, local models, etc.).",
   },
   {
     key: "chatCompletionEndpoint",
@@ -91,7 +91,7 @@ export const settingsSchema: SettingSchemaDesc[] = [
     type: "string",
     default: "dall-e-3",
     title: "Text2Img Model",
-    description: "The text-to-image model to use. Can be any model name supported by your API provider.",
+    description: "Model name for text-to-image generation. Supports any model compatible with OpenAI API specification (e.g., dall-e-3, dall-e-2, etc.).",
   },
   {
     key: "text2ImgStyle",
@@ -108,6 +108,30 @@ export const settingsSchema: SettingSchemaDesc[] = [
     title: "Quality",
     description:
       "The quality of the image that will be generated. ‘hd’ creates images with finer details and greater consistency across the image. Defaults to ‘standard’.",
+  },
+    {
+    key: "whisperApiKey",
+    type: "string",
+    default: "",
+    title: "Whisper API Key",
+    description:
+      "API key for Whisper speech-to-text service. Leave empty to use the same API key as chat completion.",
+  },
+  {
+    key: "whisperEndpoint",
+    type: "string",
+    default: "https://api.openai.com/v1",
+    title: "Whisper API Endpoint",
+    description:
+      "API endpoint URL for Whisper speech-to-text service. Leave empty to use the same endpoint as chat completion.",
+  },
+  {
+    key: "whisperModel",
+    type: "string",
+    default: "whisper-1",
+    title: "Whisper Model",
+    description:
+      "Model name for speech-to-text conversion. Supports any model compatible with OpenAI API specification (e.g., whisper-1, whisper-large, local speech recognition models, etc.).",
   },
   {
     key: "shortcutBlock",
@@ -143,6 +167,9 @@ export function getOpenaiSettings(): PluginOptions {
   const text2ImgEndpoint = logseq.settings!["text2ImgEndpoint"];
   const chatPrompt = logseq.settings!["chatPrompt"];
   const completionEndpoint = logseq.settings!["chatCompletionEndpoint"];
+  const whisperApiKey = logseq.settings!["whisperApiKey"];
+  const whisperEndpoint = logseq.settings!["whisperEndpoint"];
+  const whisperModel = logseq.settings!["whisperModel"];
   return {
     apiKey,
     completionEngine,
@@ -157,5 +184,8 @@ export function getOpenaiSettings(): PluginOptions {
     injectPrefix,
     chatPrompt,
     completionEndpoint,
+    whisperApiKey,
+    whisperEndpoint,
+    whisperModel,
   };
 }

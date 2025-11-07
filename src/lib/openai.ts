@@ -19,6 +19,9 @@ export interface OpenAIOptions {
   text2ImgEndpoint?: string;
   chatPrompt?: string;
   completionEndpoint?: string;
+  whisperApiKey?: string;
+  whisperEndpoint?: string;
+  whisperModel?: string;
 }
 
 const OpenAIDefaults = (apiKey: string): OpenAIOptions => ({
@@ -31,7 +34,10 @@ const OpenAIDefaults = (apiKey: string): OpenAIOptions => ({
   text2ImgModel: 'dall-e-3',
   text2ImgQuality: 'standard',
   text2ImgStyle: 'vivid',
-  text2ImgEndpoint: undefined
+  text2ImgEndpoint: undefined,
+  whisperApiKey: undefined,
+  whisperEndpoint: undefined,
+  whisperModel: 'whisper-1'
 });
 
 const retryOptions = {
@@ -70,9 +76,11 @@ function migrateOldUrl(url: string) {
 }
 
 export async function whisper(file: File,openAiOptions:OpenAIOptions): Promise<string> {
-    const apiKey = openAiOptions.apiKey;
-    const baseUrl = openAiOptions.completionEndpoint ? migrateOldUrl(openAiOptions.completionEndpoint)  : "https://api.openai.com/v1";
-    const model = 'whisper-1';
+    // Use whisper-specific options if provided, otherwise fallback to main options
+    const apiKey = openAiOptions.whisperApiKey || openAiOptions.apiKey;
+    const baseUrl = openAiOptions.whisperEndpoint ? migrateOldUrl(openAiOptions.whisperEndpoint) : 
+                   (openAiOptions.completionEndpoint ? migrateOldUrl(openAiOptions.completionEndpoint) : "https://api.openai.com/v1");
+    const model = openAiOptions.whisperModel || 'whisper-1';
   
     // Create a FormData object and append the file
     const formData = new FormData();
