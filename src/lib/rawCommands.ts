@@ -13,7 +13,7 @@ function handleOpenAIError(e: any) {
     console.error(`Unknown OpenAI error: ${e}`);
     // 显示具体的错误信息而不是简单的"Unknown OpenAI Error"
     const errorMessage = e.message || e.toString();
-    logseq.App.showMsg(`OpenAI Error: ${errorMessage}`, "error");
+    logseq.UI.showMsg(`OpenAI Error: ${errorMessage}`, "error");
     return;
   }
 
@@ -25,21 +25,21 @@ function handleOpenAIError(e: any) {
   if (httpStatus === 401) {
     console.error("OpenAI API key is invalid.");
     // 提供更具体的错误信息，区分文本模型和文生图模型的API Key问题
-    logseq.App.showMsg("Invalid OpenAI API Key. Please check your API key settings for both text and image generation.", "error");
+    logseq.UI.showMsg("Invalid OpenAI API Key. Please check your API key settings for both text and image generation.", "error");
   } else if (httpStatus === 429) {
     if (errorType === "insufficient_quota") {
       console.error(
         "Exceeded OpenAI API quota. Or your trial is over. You can buy more at https://beta.openai.com/account/billing/overview"
       );
-      logseq.App.showMsg("OpenAI Quota Reached", "error");
+      logseq.UI.showMsg("OpenAI Quota Reached", "error");
     } else {
       console.warn(
         "OpenAI API rate limit exceeded. Try slowing down your requests."
       );
-      logseq.App.showMsg("OpenAI Rate Limited", "warning");
+      logseq.UI.showMsg("OpenAI Rate Limited", "warning");
     }
   } else {
-    logseq.App.showMsg("OpenAI Plugin Error", "error");
+    logseq.UI.showMsg("OpenAI Plugin Error", "error");
   }
   console.error(`OpenAI error: ${errorType} ${errorCode}  ${errorMessage}`);
 }
@@ -49,7 +49,7 @@ function validateSettings(settings: OpenAIOptions) {
   const hasValidApiKey = settings.apiKey || settings.text2ImgApiKey;
   if (!hasValidApiKey) {
     console.error("Need API key set in settings.");
-    logseq.App.showMsg(
+    logseq.UI.showMsg(
       "Need openai API key. Add one in plugin settings.",
       "error"
     );
@@ -67,7 +67,7 @@ function validateSettings(settings: OpenAIOptions) {
     settings.text2ImgImageSize !== '1792x1024'
   ) {
     console.error("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024.");
-    logseq.App.showMsg("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024.", "error");
+    logseq.UI.showMsg("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024.", "error");
     throw new Error("Text2Img image size must be 256, 512, 1024, 1024x1024, 1024x1792, or 1792x1024");
   }
 }
@@ -83,7 +83,7 @@ export async function runGptBlock(b: IHookEvent) {
   }
 
   if (currentBlock.content.trim().length === 0) {
-    logseq.App.showMsg("Empty Content", "warning");
+    logseq.UI.showMsg("Empty Content", "warning");
     console.warn("Blank page");
     return;
   }
@@ -106,7 +106,7 @@ export async function runGptBlock(b: IHookEvent) {
     }, () => {});
 
     if (!result) {
-      logseq.App.showMsg("No OpenAI content" , "warning");
+      logseq.UI.showMsg("No OpenAI content" , "warning");
       return;
     }
   } catch (e: any) {
@@ -122,7 +122,7 @@ export async function runGptPage(b: IHookEvent) {
   const currentBlock = await logseq.Editor.getBlock(b.uuid);
 
   if (pageContents.length === 0) {
-    logseq.App.showMsg("Empty Content", "warning");
+    logseq.UI.showMsg("Empty Content", "warning");
     console.warn("Blank page");
     return;
   }
@@ -152,7 +152,7 @@ export async function runGptPage(b: IHookEvent) {
       }
     }, () => {});
     if (!result) {
-      logseq.App.showMsg("No OpenAI content" , "warning");
+      logseq.UI.showMsg("No OpenAI content" , "warning");
       return;
     }
 
@@ -172,7 +172,7 @@ export async function runText2ImgBlock(b: IHookEvent) {
   }
 
   if (currentBlock.content.trim().length === 0) {
-    logseq.App.showMsg("Empty Content", "warning");
+    logseq.UI.showMsg("Empty Content", "warning");
     console.warn("Blank block");
     return;
   }
@@ -180,7 +180,7 @@ export async function runText2ImgBlock(b: IHookEvent) {
   try {
     const imageURL = await text2Img(currentBlock.content, openAISettings);
     if (!imageURL) {
-      logseq.App.showMsg("No Text2Img results.", "warning");
+      logseq.UI.showMsg("No Text2Img results.", "warning");
       return;
     }
     const imageFileName = await saveText2ImgImage(imageURL);
@@ -197,7 +197,7 @@ export async function runWhisper(b: IHookEvent) {
   if (currentBlock) {
     const audioFile = await getAudioFile(currentBlock.content);
     if (!audioFile) {
-      logseq.App.showMsg("No supported audio file found in block.", "warning");
+      logseq.UI.showMsg("No supported audio file found in block.", "warning");
       return;
     }
     const openAISettings = getOpenaiSettings();

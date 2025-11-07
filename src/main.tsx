@@ -111,7 +111,7 @@ const LogseqApp = () => {
             };
           });
         } else if (!activeText && !currentPage) {
-          logseq.App.showMsg("Put cursor in block or navigate to specific page to use keyboard shortcut", "warning");
+          logseq.UI.showMsg("Put cursor in block or navigate to specific page to use keyboard shortcut", "warning");
           return;
         } else if (activeText && currentBlock) {
           updateAppState(draft => {
