@@ -123,7 +123,7 @@ export async function text2Img(
   const openai = new OpenAI({
     apiKey: apiKey,
     baseURL: endpoint,
-    dangerouslyAllowBrowser: true
+    // dangerouslyAllowBrowser: true
   });
 
   // Convert image size format
